@@ -1,5 +1,5 @@
-contacts = []
-debug = True
+contacts = {}
+debug = False
 
 def parse_input(user_input):
     cmd, *args = user_input.split()
@@ -8,41 +8,47 @@ def parse_input(user_input):
 
 def add_contact(args):
   try:
-    contacts.append({"name":args[0].casefold(), "phone":args[1].casefold()})
+    if args[0].casefold() in contacts.keys():
+      return 1
+    else:
+      contacts[args[0].casefold()] = args[1].casefold()
+      return 0
   except Exception as e:
-    print("Wrong args!")
+    return -1
     if(debug):
       print(e)
 
 def change_contact(args):
   try:
-    for i in range(len(contacts)):
-      if(args[0].casefold() == contacts[i]["phone"]):
-        contacts[i]["phone"] = args[1]
-
+    if args[0].casefold() in contacts.keys():
+      contacts[args[0].casefold()] = args[1].casefold()
+      return 0
+    else:
+      return 1
   except Exception as e:
-    print("Wrong args!")
+    return -1
     if(debug):
       print(e)
 
-def show_phone(args):
+def get_phone(args):
   try:
-    for i in contacts:
-      if(args[0].casefold() == i["name"]):
-        print(i["phone"])
-
+    if args[0].casefold() in contacts.keys():
+      return contacts[args[0].casefold()]
+    else:
+      return 1
   except Exception as e:
-    print("Wrong args!")
+    return -1
     if(debug):
       print(e)
 
-def show_all(args):
+def get_all(args):
   try:
+    contacts_ = []
     for i in contacts:
-      print(i["name"] + ": " + i["phone"])
-
+      contacts_.append(i + ": " + contacts[i])
+    return contacts_
   except Exception as e:
-    print("Wrong args!")
+    
     if(debug):
       print(e)
 
@@ -58,14 +64,42 @@ def main():
 
         elif command == "hello":
           print("How can I help you?")
+
         elif command == "add":
-            add_contact(args)
+            r = add_contact(args)
+            if(r==0):
+              print("Success!")
+            elif(r==1):
+              print("Contact of " + args[0] + " already exists.")
+            elif(r==-1):
+              print("Wrong args!")
+
         elif command == "change":
-            change_contact(args)
+            r = change_contact(args)
+            if(r==0):
+              print("Success!")
+            elif(r==1):
+              print("Contact of " + args[0] + " doesn`t exist.")
+            elif(r==-1):
+              print("Wrong args!")
+
         elif command == "phone":
-            show_phone(args)
+            r = get_phone(args)
+            if(r==1):
+              print("Contact of " + args[0] + " doesn`t exist.")
+            elif(r==-1):
+              print("Wrong args!")
+            else:
+              print(r)
+
         elif command == "all":
-            show_all(args)
+            r = get_all(args)
+            if(len(r) == 0):
+              print("There are no contacts registried.")
+            else:
+              for i in r:
+                print(i)
+
         else:
             print("Invalid command.")
 

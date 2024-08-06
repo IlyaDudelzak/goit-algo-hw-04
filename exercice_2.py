@@ -5,7 +5,7 @@ def get_cats_info(path):
     for line in lines:
       line = line.strip()
       l = line.split(',')
-      infos.append({"id":l[0], "name":l[1], "age":int(l[2])})
+      infos.append({"id":l[0], "name":l[1], "age":l[2]})
 
     return infos
 
