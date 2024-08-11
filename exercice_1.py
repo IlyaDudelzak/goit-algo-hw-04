@@ -24,6 +24,10 @@ def total_salary(path):
     print("Файл поврежден")
     return (0, 0)
 
+  except ZeroDivisionError:
+    print("Файл не содержит зарплат")
+    return (0, 0)
+
 total, average = total_salary("salary_file.txt")
 if(total != 0 and average != 0):
   print(f"Загальна сума заробітної плати: {total}, Середня заробітна плата: {average}")
